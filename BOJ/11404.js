@@ -2,32 +2,35 @@ const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 let input = fs.readFileSync(filePath).toString().trim().split("\n");
 
-const n = Number(input.shift()); // 도시 개수
-const m = Number(input.shift()); // 버스 개수
+const n = Number(input.shift());
+const m = Number(input.shift());
 input = input.map((el) => el.split(" ").map((el) => +el));
 
-let nosun = Array.from(new Array(n), () => Array(n).fill(0));
+let nosun = Array.from(new Array(n + 1), () => Array(n + 1).fill(Infinity));
 
-// 최소의 수 넣기
 for (let i = 0; i < m; i++) {
   const from = input[i][0];
   const to = input[i][1];
   const cost = input[i][2];
 
-  // index 맞추기 위해 -1
-  if (nosun[from - 1][to - 1] !== 0) {
-    nosun[from - 1][to - 1] = Math.min(cost, nosun[from - 1][to - 1]);
-  } else nosun[from - 1][to - 1] = cost;
+  nosun[from][to] = Math.min(cost, nosun[from][to]);
 }
 
-for (let k = 0; k < n; k++) {
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < n; j++) {
-      if (nosun[i][k] !== 0 && nosun[k][j] !== 0) {
+for (let k = 0; k < n + 1; k++) {
+  for (let i = 0; i < n + 1; i++) {
+    for (let j = 0; j < n + 1; j++) {
+      if (i === j) nosun[i][j] = 0;
+      else {
         nosun[i][j] = Math.min(nosun[i][j], nosun[i][k] + nosun[k][j]);
       }
     }
   }
 }
 
-console.log(nosun);
+for (let i = 1; i < n + 1; i++) {
+  for (let j = 1; j < n + 1; j++) {
+    if (nosun[i][j] === Infinity) nosun[i][j] = 0;
+  }
+  nosun[i] = nosun[i].slice(1);
+  console.log(nosun[i].join(" "));
+}
