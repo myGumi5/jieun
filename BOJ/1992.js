@@ -1,6 +1,6 @@
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-let input = fs.readFileSync(filePath).toString().trim().split("\r\n");
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
 
 const N = Number(input.shift());
 let map = input.map((el) => el.split("").map((el) => +el));
@@ -10,9 +10,9 @@ let answer = [];
 const recur = (y, x, n) => {
   let result = 0;
 
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < n; j++) {
-      result += map[x + j][y + i];
+  for (let i = y; i < y + n; i++) {
+    for (let j = x; j < x + n; j++) {
+      result += map[i][j];
     }
   }
 
@@ -26,10 +26,10 @@ const recur = (y, x, n) => {
     // 기존 N x N 행렬에서 하나라도 압축되면
     answer.push("(");
 
-    recur(y, x, n);
-    recur(y + n, x, n);
-    recur(y, x + n, n);
-    recur(y + n, x + n, n);
+    recur(y, x, n); // 왼쪽 위
+    recur(y, x + n, n); // 오른쪽 위
+    recur(y + n, x, n); // 왼쪽 아래
+    recur(y + n, x + n, n); // 오른쪽 아래
 
     answer.push(")");
   }
