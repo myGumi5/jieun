@@ -1,24 +1,26 @@
-const fs = require("fs");
-const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-let input = fs.readFileSync(filePath).toString().trim().split("\n");
+let input = require("fs")
+  .readFileSync("./input.txt") // "/dev/stdin"
+  .toString()
+  .trim()
+  .split("\n");
 
-const [N, K] = input
-  .shift()
-  .split(" ")
-  .map((el) => +el);
+const [N, K] = input.shift().split(" ").map(Number);
+let bags = input.map((el) => el.split(" ").map(Number));
+bags.unshift(0); // index 1부터 시작하기 위함
 
-let bags = Array.from(Array(N + 1), () => Array(K + 1).fill(0));
-
+let DP = Array.from(Array(N + 1), () => Array(K + 1).fill(0));
 for (let i = 1; i <= N; i++) {
-  const [weight, value] = input[i - 1].split(" ").map((el) => +el);
+  const [weight, value] = bags[i]; // i번째 가방의 무게, 가치
 
   for (let j = 1; j <= K; j++) {
-    if (j < weight) {
-      bags[i][j] = bags[i - 1][j];
-    } else {
-      bags[i][j] = Math.max(bags[i - 1][j], bags[i - 1][j - weight] + value);
-    }
+    if (j < weight) DP[i][j] = DP[i - 1][j];
+    else DP[i][j] = Math.max(DP[i - 1][j], value + DP[i - 1][j - weight]);
   }
 }
 
-console.log(bags[N][K]);
+let answer = 0;
+for (let i = 1; i <= N; i++) {
+  answer = Math.max(answer, DP[i][K]);
+}
+
+console.log(answer);
