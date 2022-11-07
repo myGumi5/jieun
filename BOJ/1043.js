@@ -26,6 +26,7 @@ parties.forEach((party) => {
     const p2 = getParent(nums[i + 1]);
 
     if (p1 === p2) continue;
+    // 진실을 아는 사람들의 부모를 0으로 맞춰줘야 하므로 대소비교 해야함
     if (p1 > p2) parents[p1] = p2;
     else parents[p2] = p1;
   }
@@ -46,6 +47,7 @@ parties.forEach((party) => {
 
 function getParent(n) {
   if (parents[n] === n) return n;
+  // 경로압축
   return (parents[n] = getParent(parents[n]));
 }
 
