@@ -7,7 +7,7 @@ function solution(queue1, queue2) {
   let pointer1 = 0; // queue1의 포인터 시작점
   let pointer2 = queue1.length; // queue2의 포인터 시작점
 
-  for (let count = 0; count < queue1.length * 3; count++) {
+  for (let count = 0; count < q.length * 2; count++) {
     if (sum1 === goal) return count;
 
     if (sum1 > goal) sum1 -= q[pointer1++ % q.length];
