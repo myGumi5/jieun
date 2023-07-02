@@ -1,5 +1,5 @@
 // 수열
-// 누적 합
+// 슬라이딩 윈도우
 
 let input = require("fs")
   .readFileSync("./input.txt") // "/dev/stdin"
