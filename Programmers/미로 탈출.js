@@ -20,13 +20,10 @@ function solution(maps) {
     }
   }
 
-  const toLeverMap = maps;
-  const toEndMap = maps;
+  const toLeverTime = BFS(sy, sx, "L");
+  const toEndTime = BFS(ly, lx, "E");
 
-  const toLeverTime = BFS(sy, sx, "L", toLeverMap);
-  const toEndTime = BFS(ly, lx, "E", toEndMap);
-
-  function BFS(y, x, target, map) {
+  function BFS(y, x, target) {
     const queue = [];
     queue.push([y, x, 0]);
 
@@ -36,13 +33,13 @@ function solution(maps) {
     while (queue.length) {
       const [cy, cx, time] = queue.shift();
 
-      if (map[cy][cx] === target) return time;
+      if (maps[cy][cx] === target) return time;
 
       for (let d = 0; d < 4; d++) {
         const ny = cy + dy[d];
         const nx = cx + dx[d];
 
-        if (rangeCheck(ny, nx) && !visited[ny][nx] && map[ny][nx] !== "X") {
+        if (rangeCheck(ny, nx) && !visited[ny][nx] && maps[ny][nx] !== "X") {
           queue.push([ny, nx, time + 1]);
           visited[ny][nx] = true;
         }
@@ -66,4 +63,4 @@ console.log(solution(maps));
 // 가장 빠른(최소 시간) 방법을 찾는 거니까 BFS로 접근
 // 단순 BFS는 시간 초과 발생
 // lever, end까지 가는 BFS를 두 개 돌려도 시간 초과 발생
-// BFS에서 방문한 공간을 X로 바꾸는게아니라 visited 배열로 처리하니 통과
+// BFS로 배열을 직접 변형하지 않고 visited배열로 처리하니 통과
