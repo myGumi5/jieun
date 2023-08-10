@@ -1,10 +1,8 @@
-const fs = require("fs");
-const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-let input = fs.readFileSync(filePath).toString().trim().split("\n");
+// RGB거리
 
-let [N, ...RGB] = input;
+let [N, ...RGB] = require("fs").readFileSync("./input.txt").toString().trim().split("\n");
 N = Number(N);
-RGB = RGB.map((el) => el.split(" ").map((color) => Number(color)));
+RGB = RGB.map((el) => el.split(" ").map(Number));
 
 for (let i = 1; i < N; i++) {
   RGB[i][0] += Math.min(RGB[i - 1][1], RGB[i - 1][2]);
