@@ -1,23 +1,18 @@
-let input = require("fs")
-  .readFileSync("./input.txt") // "/dev/stdin"
-  .toString()
-  .trim()
-  .split("\n");
+// 계단 오르기
 
+let input = require('fs').readFileSync('./input.txt').toString().trim().split('\n');
 const N = Number(input.shift());
 input = input.map(Number);
-input.unshift(0);
-const DP = new Array(N + 1).fill(0);
 
-DP[1] = input[1];
+const score = Array(N + 1).fill(0); // score[0] : 시작점
+score[1] = input[0];
 
-if (N >= 2) DP[2] = input[1] + input[2];
-
+if (N >= 2) score[2] = input[0] + input[1];
 for (let i = 3; i <= N; i++) {
-  const oneStep = input[i - 1] + DP[i - 3];
-  const twoStep = DP[i - 2];
+  const oneStep = input[i - 2] + score[i - 3]; // 한 계단 간격으로 i번째 계단에 올랐을 때 얻는 점수
+  const twoStep = score[i - 2]; // 두 계단 간격으로 i번째 계단에 올랐을 때 얻는 점수
 
-  DP[i] = input[i] + Math.max(oneStep, twoStep);
+  score[i] = input[i - 1] + Math.max(oneStep, twoStep);
 }
 
-console.log(DP[N]);
+console.log(score[N]);
